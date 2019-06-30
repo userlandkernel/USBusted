@@ -7,7 +7,7 @@ import binascii
 def banner():
   print('PoC for iOS Kernel UaF, reachable through USB by @RazMashat, contributions from @userlandkernel')
   print('Original bug by @userlandkernel and @posixninja')
-  print('(C) All rights reserved, Minerva Mobile Security & Joshua Hill')
+  print('Copyright © All rights reserved, Minerva Mobile Security & Joshua Hill')
   print(' ')
 
 def setup():
