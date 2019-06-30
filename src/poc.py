@@ -4,6 +4,17 @@ import time
 import usb.core
 import binascii
 
+# The Bug was first discovered back in 2017 by @userlandkernel when both VMWare and Microsoft® Windows tried to get a USB control for PTP.
+# The Bug was then reported to Apple in 2018 by @userlandkernel and @posixninja aside of eachother, both discovered this issue.
+# Apple did not take any effort to patch this vulnerability
+# Joshua Hill (@posixninja) then suspected this bug to be in PTP, an old image transfer protocol
+# Sem Voigtländer (@userlandkernel) then decided to fuzz the protocol through random USB packets while intercepting the stream with Wireshark
+# Raz Mashat then succeeded in triggering the vulnerability through interface 5 of the fuzzer
+# He then forensically analyzed what packet caused the crash and wrote this PoC.
+# From analyzing the crashlogs we now know that the crash must have been the result of a Use After Free. 
+# Though accross different devices and iOS versions the corruption occurs in different parts with different faulting codes.
+# That may mean that more bugs are present in the same interface, triggered the same way.
+
 def banner():
   print('PoC for iOS Kernel UaF, reachable through USB by @RazMashat, contributions from @userlandkernel')
   print('Original bug by @userlandkernel and @posixninja')
