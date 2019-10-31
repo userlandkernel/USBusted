@@ -13,6 +13,7 @@
 #include <IOKit/IOCFPlugIn.h>
 #include <CoreFoundation/CoreFoundation.h>
 
+/* Faster comparissions for 64-bit integers than != and == */
 #define FCOMP(P1,P2) !(P1 ^ P2)
 
 const char *defaultMsg = "HELLO WORLD";
@@ -25,6 +26,7 @@ static int send_usb_msg(IOUSBDeviceInterface** dev, int type, int reqno, int val
         printf("No device handle given.\n");
         return KERN_FAILURE;
     }
+	
     if(!msg)
         msg = defaultMsg;
     
@@ -142,7 +144,6 @@ static int iterate_usb_devices(const char *msg){
     {
         return -1; // fail
     }
-
     
     /* Now we have a dictionary, get an iterator.*/
     kr = IOServiceGetMatchingServices(kIOMasterPortDefault, matchingDict, &iter);
