@@ -1,4 +1,9 @@
-/* Pure IOKit implementation of CVE-2019-8718 */
+/* 
+	Pure IOKit implementation of CVE-2019-8718 
+	Written by Sem Voigtländer.
+	Compile: clang iousbusted.c -o iousbusted -framework IOKit -framework CoreFoundation
+	Tip: You can also use this for projects like checkm8 autopwn etc.
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
