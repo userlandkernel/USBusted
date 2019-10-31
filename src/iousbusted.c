@@ -92,7 +92,7 @@ static int print_usb_device(io_service_t device){
     CFDictionaryGetValueIfPresent(p, CFSTR("locationID"), &locationID);
     
     CFNumberGetValue(vid, kCFNumberSInt32Type, &vid);
-    CFNumberGetValue(pid, kCFNumberSInt32Type, &pid);
+    CFNumberGetValue(pid, kCFNumberSInt32Type, &pid);	// <-- yes I know this is dirty, I was tired.
     
     if(locationID)
         CFNumberGetValue(locationID, kCFNumberSInt32Type, &locationID);
